@@ -5,11 +5,10 @@ module.exports = {
     extend: {
       colors: {
         "bg-black-1": "#23282b",
-        "bg-black": "#30373b",
-        "bianco-1-findora": "#fcf8f8",
-        "verde-1-findora": "#1ab58a",
+        "bg-black-2": "#30373b",
+        "white-1": "#f5f5f5",
+        "green-1": "#1ab58a",
         white: "#fff",
-        gainsboro: "#d9d9d9",
       },
       fontFamily: { roboto: "Roboto" },
       animation: {
