@@ -1,3 +1,10 @@
+/**
+ * Sessione:
+Utilizzata per memorizzare dati solo per la durata della sessione dell'utente.
+I dati vengono rimossi quando l'utente chiude il browser o la scheda.
+È utile per dati temporanei che non devono persistere oltre la sessione attuale.
+ */
+
 // SESSION STORAGE:
 
 // Funzione per memorizzare i dati in sessionStorage

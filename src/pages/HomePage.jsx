@@ -1,33 +1,42 @@
 import React, { useEffect, useState } from "react";
 import { getRandomMeal } from "../api/mealApi";
 import RecipeCard from "../components/RecipeCard";
-import { setSessionData, getSessionData } from "../api/session"; // Importa le funzioni
-import { getMealFromCache, setMealInCache } from "../api/cache"; // Importa le funzioni di caching
+import { setMealInCache, getMealFromCache } from "../api/cache"; // Importa le funzioni di caching
 
 const HomePage = () => {
   const [allMeals, setAllMeals] = useState([]);
   const [numMeals, setNumMeals] = useState(25);
+  const [loading, setLoading] = useState(true); // Stato di caricamento
 
   // UseEffect esegue la funzione fetchInitialMeals solo al montaggio del componente
   useEffect(() => {
     const fetchInitialMeals = async () => {
-      const cachedMeals = getSessionData("allMeals");
+      const cachedMeals = []; // Array per memorizzare i pasti dalla cache
 
-      if (cachedMeals) {
+      // Controlla se ci sono pasti nella cache
+      for (let i = 0; i < numMeals; i++) {
+        const meal = getMealFromCache(i + 1); // Supponendo che gli ID dei pasti siano sequenziali
+        if (meal) {
+          cachedMeals.push(meal);
+        }
+      }
+
+      if (cachedMeals.length > 0) {
         setAllMeals(cachedMeals);
+        setLoading(false); // Nascondi il loader
       } else {
         const mealPromises = Array.from({ length: numMeals }, () =>
           getRandomMeal()
         );
         const results = await Promise.all(mealPromises);
         setAllMeals(results);
-        setSessionData("allMeals", results); // Usa la funzione per memorizzare i dati
         results.forEach((meal) => setMealInCache(meal.idMeal, meal)); // Memorizza nella cache
+        setLoading(false); // Nascondi il loader
       }
     };
 
     fetchInitialMeals();
-  }, []);
+  }, [numMeals]);
 
   useEffect(() => {
     const addRandomMeal = async () => {
@@ -59,11 +68,20 @@ const HomePage = () => {
             className="w-20 p-2 border border-gray-300 rounded"
           />
         </div>
-        <div className="grid grid-cols-5 mt-4 gap-7 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5">
-          {allMeals.slice(0, numMeals).map((meal) => (
-            <RecipeCard key={meal.idMeal} meal={meal} />
-          ))}
-        </div>
+
+        {loading ? ( // Mostra il loader se loading è true
+          <div className="flex justify-center mt-4">
+            <span className="material-icons animate-spin">hourglass_empty</span>{" "}
+            {/* Icona di caricamento */}
+          </div>
+        ) : (
+          <div className="grid grid-cols-5 mt-4 gap-7 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5">
+            {allMeals.slice(0, numMeals).map((meal) => (
+              <RecipeCard key={meal.idMeal} meal={meal} />
+            ))}
+          </div>
+        )}
+
         <div className="mt-8 text-center">
           <h2 className="text-2xl font-bold">
             Iscriviti alla nostra Newsletter
