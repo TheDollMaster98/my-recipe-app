@@ -1,34 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import { getRandomMeal } from '../api/mealApi';
 import RecipeCard from '../components/RecipeCard';
+import { setSessionData, getSessionData } from '../api/session'; // Importa le funzioni
 
 const HomePage = () => {
-  // Stato per memorizzare tutte le ricette caricate
   const [allMeals, setAllMeals] = useState([]);
-  // Stato per memorizzare il numero di ricette da mostrare
   const [numMeals, setNumMeals] = useState(12);
 
-  // useEffect viene eseguito solo una volta al montaggio del componente
   useEffect(() => {
-    // Funzione per ottenere pasti casuali iniziali
     const fetchInitialMeals = async () => {
-      const mealPromises = Array.from({ length: numMeals }, () => getRandomMeal());
-      const results = await Promise.all(mealPromises);
-      setAllMeals(results);
+      const cachedMeals = getSessionData('allMeals'); // Usa la funzione per ottenere i dati
+      if (cachedMeals) {
+        setAllMeals(cachedMeals);
+      } else {
+        const mealPromises = Array.from({ length: numMeals }, () => getRandomMeal());
+        const results = await Promise.all(mealPromises);
+        setAllMeals(results);
+        setSessionData('allMeals', results); // Usa la funzione per memorizzare i dati
+      }
     };
 
-    // Chiama la funzione per ottenere i pasti iniziali
     fetchInitialMeals();
   }, []); // Esegui solo al montaggio del componente
 
   useEffect(() => {
-    // Funzione per aggiungere un pasto casuale
     const addRandomMeal = async () => {
       const newMeal = await getRandomMeal();
       setAllMeals(prevMeals => [...prevMeals, newMeal]);
     };
 
-    // Aggiungi un pasto solo se numMeals è aumentato
     if (allMeals.length < numMeals) {
       addRandomMeal();
     }
@@ -50,7 +50,6 @@ const HomePage = () => {
           />
         </div>
         <div className="grid grid-cols-4 gap-4 mt-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {/* Mappa le ricette e visualizzale */}
           {allMeals.slice(0, numMeals).map(meal => (
             <RecipeCard key={meal.idMeal} meal={meal} />
           ))}

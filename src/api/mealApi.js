@@ -1,4 +1,5 @@
 const BASE_URL = "https://www.themealdb.com/api/json/v1/1";
+const mealCache = {}; // Crea un oggetto di cache in memoria
 
 // Funzione per cercare un pasto per nome
 export const searchMealByName = async (name) => {
@@ -13,10 +14,20 @@ export const searchMealByName = async (name) => {
 
 // Funzione per ottenere i dettagli di un pasto tramite ID
 export const getMealDetailsById = async (id) => {
+  // Controlla se i dettagli sono già nella cache
+  if (mealCache[id]) {
+    return mealCache[id];
+  }
+
   try {
     const response = await fetch(`${BASE_URL}/lookup.php?i=${id}`);
     const data = await response.json();
-    return data.meals[0];
+    const mealDetails = data.meals[0];
+
+    // Memorizza i dettagli nella cache
+    mealCache[id] = mealDetails;
+
+    return mealDetails;
   } catch (error) {
     console.error("Errore nel recupero dei dettagli del pasto:", error);
   }
