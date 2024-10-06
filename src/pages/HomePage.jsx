@@ -25,7 +25,7 @@ const HomePage = () => {
     };
 
     fetchInitialMeals();
-  }, []); //
+  }, []);
 
   useEffect(() => {
     const addRandomMeal = async () => {
@@ -50,9 +50,10 @@ const HomePage = () => {
             id="numMeals"
             type="number"
             min="0"
+            max="100"
             value={numMeals}
             onChange={(e) => setNumMeals(Number(e.target.value))}
-            className="p-2 border border-gray-300 rounded"
+            className="w-20 p-2 border border-gray-300 rounded"
           />
         </div>
         <div className="grid grid-cols-5 mt-4 gap-7 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5">
