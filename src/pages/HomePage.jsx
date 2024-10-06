@@ -40,7 +40,7 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen bg-black-1">
-      <div className="p-4 mx-auto mt-8 ">
+      <div className="p-4 mx-auto">
         <h2 className="text-2xl font-bold text-center">Ricette Popolari</h2>
         <div className="flex justify-center mt-4">
           <label htmlFor="numMeals" className="mr-2">
