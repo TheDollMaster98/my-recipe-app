@@ -1,5 +1,6 @@
+import { getMealFromCache, setMealInCache } from "./cache";
+
 const BASE_URL = "https://www.themealdb.com/api/json/v1/1";
-const mealCache = {}; // Crea un oggetto di cache in memoria
 
 // Funzione per cercare un pasto per nome
 export const searchMealByName = async (name) => {
@@ -14,19 +15,16 @@ export const searchMealByName = async (name) => {
 
 // Funzione per ottenere i dettagli di un pasto tramite ID
 export const getMealDetailsById = async (id) => {
-  // Controlla se i dettagli sono già nella cache
-  if (mealCache[id]) {
-    return mealCache[id];
+  const cachedMeal = getMealFromCache(id);
+  if (cachedMeal) {
+    return cachedMeal;
   }
 
   try {
     const response = await fetch(`${BASE_URL}/lookup.php?i=${id}`);
     const data = await response.json();
     const mealDetails = data.meals[0];
-
-    // Memorizza i dettagli nella cache
-    mealCache[id] = mealDetails;
-
+    setMealInCache(id, mealDetails); // Memorizza i dettagli nella cache
     return mealDetails;
   } catch (error) {
     console.error("Errore nel recupero dei dettagli del pasto:", error);
@@ -74,5 +72,16 @@ export const getMealsByCategory = async (category) => {
     return data.meals;
   } catch (error) {
     console.error("Errore nel recupero dei pasti per categoria:", error);
+  }
+};
+
+// Funzione per ottenere pasti da una specifica area geografica
+export const getMealsByArea = async (area) => {
+  try {
+    const response = await fetch(`${BASE_URL}/filter.php?a=${area}`);
+    const data = await response.json();
+    return data.meals;
+  } catch (error) {
+    console.error("Errore nel recupero dei pasti per area:", error);
   }
 };

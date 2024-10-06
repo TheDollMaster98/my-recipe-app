@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getRandomMeal } from "../api/mealApi";
 import RecipeCard from "../components/RecipeCard";
 import { setSessionData, getSessionData } from "../api/session"; // Importa le funzioni
+import { getMealFromCache, setMealInCache } from "../api/cache"; // Importa le funzioni di caching
 
 const HomePage = () => {
   const [allMeals, setAllMeals] = useState([]);
@@ -21,6 +22,7 @@ const HomePage = () => {
         const results = await Promise.all(mealPromises);
         setAllMeals(results);
         setSessionData("allMeals", results); // Usa la funzione per memorizzare i dati
+        results.forEach((meal) => setMealInCache(meal.idMeal, meal)); // Memorizza nella cache
       }
     };
 
@@ -31,6 +33,7 @@ const HomePage = () => {
     const addRandomMeal = async () => {
       const newMeal = await getRandomMeal();
       setAllMeals((prevMeals) => [...prevMeals, newMeal]);
+      setMealInCache(newMeal.idMeal, newMeal); // Memorizza il nuovo pasto nella cache
     };
 
     if (allMeals.length < numMeals) {
@@ -44,7 +47,7 @@ const HomePage = () => {
         <h2 className="text-2xl font-bold text-center">Ricette Popolari</h2>
         <div className="flex justify-center mt-4">
           <label htmlFor="numMeals" className="mr-2">
-            Numero di ricette da mostrare:
+            Quante ne vuoi visualizzare?
           </label>
           <input
             id="numMeals"
@@ -57,7 +60,6 @@ const HomePage = () => {
           />
         </div>
         <div className="grid grid-cols-5 mt-4 gap-7 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5">
-          {" "}
           {allMeals.slice(0, numMeals).map((meal) => (
             <RecipeCard key={meal.idMeal} meal={meal} />
           ))}
