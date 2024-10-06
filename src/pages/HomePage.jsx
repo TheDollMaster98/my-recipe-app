@@ -9,7 +9,8 @@ const HomePage = () => {
 
   useEffect(() => {
     const fetchInitialMeals = async () => {
-      const cachedMeals = getSessionData('allMeals'); // Usa la funzione per ottenere i dati
+      const cachedMeals = getSessionData('allMeals'); 
+      
       if (cachedMeals) {
         setAllMeals(cachedMeals);
       } else {

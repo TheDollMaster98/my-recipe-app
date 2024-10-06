@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getMealDetailsById } from '../api/mealApi';
 
@@ -6,6 +6,7 @@ const RecipeDetailPage = () => {
   const { id } = useParams(); // Ottieni l'ID della ricetta dai parametri URL
   const navigate = useNavigate(); // Hook per la navigazione
   const [meal, setMeal] = useState(null);
+  const backButtonRef = useRef(null); // Riferimento per la freccia "Torna Indietro"
 
   const fetchMealDetails = async () => {
     const mealDetails = await getMealDetailsById(id);
@@ -15,6 +16,11 @@ const RecipeDetailPage = () => {
   useEffect(() => {
     fetchMealDetails();
   }, [id]);
+
+  useEffect(() => {
+    // Scorri verso l'alto quando il componente viene montato
+    window.scrollTo(0, 0);
+  }, [meal]);
 
   const handleGoBack = () => {
     navigate(-1); // Torna indietro
@@ -28,6 +34,7 @@ const RecipeDetailPage = () => {
   return (
     <div className="min-h-screen p-4 bg-white-1">
       <div
+        ref={backButtonRef} // Aggiungi il riferimento qui
         onClick={handleGoBack}
         className="flex items-center p-2 mb-4 text-black cursor-pointer"
       >
