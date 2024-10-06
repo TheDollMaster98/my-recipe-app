@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { setSessionData } from "../api/session"; // Assicurati di avere una funzione per gestire la sessione
+import { setSessionData, getSessionData } from "../api/session"; // Assicurati di avere una funzione per gestire la sessione
 import { useNavigate } from "react-router-dom";
+
+const users = []; // Array per memorizzare gli utenti registrati
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -11,14 +13,13 @@ const LoginPage = () => {
   const handleLogin = (e) => {
     e.preventDefault();
 
-    // Credenziali fake predefinite
-    const defaultEmail = "user@example.com";
-    const defaultPassword = "password";
+    // Verifica se l'utente esiste
+    const user = users.find(
+      (user) => user.email === email && user.password === password
+    );
 
-    // Logica di autenticazione simulata
-    if (email === defaultEmail && password === defaultPassword) {
-      const userData = { email, username: "User di Prova" }; // Dati utente simulati
-      setSessionData("user", userData); // Salva i dati dell'utente nella sessione
+    if (user) {
+      setSessionData("user", { email: user.email, username: user.username }); // Salva i dati dell'utente nella sessione
       navigate("/profile"); // Reindirizza alla pagina del profilo
     } else {
       alert("Credenziali non valide");
@@ -27,7 +28,19 @@ const LoginPage = () => {
 
   const handleRegister = (e) => {
     e.preventDefault();
-    // Logica per la registrazione dell'utente
+
+    // Verifica se l'email è già registrata
+    const existingUser = users.find((user) => user.email === email);
+    if (existingUser) {
+      alert("Email già registrata");
+      return;
+    }
+
+    // Aggiungi il nuovo utente all'array
+    const newUser = { email, password, username: "User di Prova" }; // Puoi personalizzare il nome utente
+    users.push(newUser);
+    alert("Registrazione avvenuta con successo! Puoi ora effettuare il login.");
+    setShowRegister(false); // Torna al modulo di login
   };
 
   const toggleForm = () => {
