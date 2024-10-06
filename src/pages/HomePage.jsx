@@ -48,6 +48,8 @@ const HomePage = () => {
     if (allMeals.length < numMeals) {
       addRandomMeal();
     }
+    console.log("allMeals => ");
+    console.log(allMeals);
   }, [numMeals, allMeals.length]); // Esegui quando numMeals cambia
 
   return (
