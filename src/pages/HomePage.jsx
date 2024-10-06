@@ -7,6 +7,7 @@ const HomePage = () => {
   const [allMeals, setAllMeals] = useState([]);
   const [numMeals, setNumMeals] = useState(12);
 
+  // UseEffect esegue la funzione fetchInitialMeals solo al montaggio del componente
   useEffect(() => {
     const fetchInitialMeals = async () => {
       const cachedMeals = getSessionData('allMeals'); 
@@ -22,7 +23,7 @@ const HomePage = () => {
     };
 
     fetchInitialMeals();
-  }, []); // Esegui solo al montaggio del componente
+  }, []); // 
 
   useEffect(() => {
     const addRandomMeal = async () => {
