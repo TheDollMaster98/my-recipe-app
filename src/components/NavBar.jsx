@@ -41,13 +41,13 @@ const NavBar = () => {
 
             {user ? (
               <Link to="/profile" className="text-white">
-                <span className="align-middle material-icons">
+                <span className="pl-3 align-middle material-icons">
                   account_circle
                 </span>
               </Link>
             ) : (
               <Link to="/login" className="text-white">
-                <span className="align-middle material-icons">
+                <span className="pl-3 align-middle material-icons">
                   account_circle
                 </span>
               </Link>

@@ -9,10 +9,9 @@ import RecipeDetailPage from "./pages/RecipeDetailPage";
 function App() {
   return (
     <Router>
-      <NavBar /> {/* Aggiungi la navbar qui */}
+      <NavBar />
       <div className="bg-gray-100">
         {" "}
-        {/* Rimuovi il padding-top */}
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/profile" element={<UserProfilePage />} />
