@@ -1,3 +1,4 @@
+// eslint-disable-next-lin
 import React, { useState } from "react";
 import { setSessionData, getSessionData } from "../api/session"; // Assicurati di avere una funzione per gestire la sessione
 import { useNavigate } from "react-router-dom";
