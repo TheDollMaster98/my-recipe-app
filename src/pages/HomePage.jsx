@@ -10,25 +10,37 @@ const HomePage = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState(""); // Stato per il valore della ricerca
 
+  // Recupera i dati salvati in sessionStorage quando la pagina viene caricata
   useEffect(() => {
-    const fetchInitialMeals = async () => {
-      const cachedMeals = getAllMealsFromCache();
-      if (cachedMeals.length > 0) {
-        setAllMeals(cachedMeals);
-        setFilteredMeals(cachedMeals);
-        setLoading(false);
-      } else {
-        const mealPromises = Array.from({ length: numMeals }, () => getRandomMeal());
-        const results = await Promise.all(mealPromises);
-        setAllMeals(results);
-        setFilteredMeals(results);
-        results.forEach((meal) => setMealInCache(meal.idMeal, meal));
-        setLoading(false);
-      }
-    };
+    const savedSearchTerm = sessionStorage.getItem("lastSearchTerm");
+    const savedSearchResults = sessionStorage.getItem("lastSearchResults");
 
-    fetchInitialMeals();
-  }, [numMeals]);
+    if (savedSearchTerm && savedSearchResults) {
+      setSearchTerm(savedSearchTerm);
+      setFilteredMeals(JSON.parse(savedSearchResults));
+      setLoading(false);
+    } else {
+      fetchInitialMeals();
+    }
+  }, []);
+
+  // Funzione per caricare le ricette iniziali
+  const fetchInitialMeals = async () => {
+    const cachedMeals = getAllMealsFromCache();
+    if (cachedMeals.length >= numMeals) {
+      setAllMeals(cachedMeals);
+      setFilteredMeals(cachedMeals);
+      setLoading(false);
+      return;
+    }
+
+    const mealPromises = Array.from({ length: numMeals }, () => getRandomMeal());
+    const results = await Promise.all(mealPromises);
+    setAllMeals(results);
+    setFilteredMeals(results);
+    results.forEach((meal) => setMealInCache(meal.idMeal, meal));
+    setLoading(false);
+  };
 
   // Funzione per aggiungere nuovi pasti se richiesto
   const addRandomMeal = useCallback(async () => {
@@ -50,14 +62,20 @@ const HomePage = () => {
     setSearchTerm(query);
 
     if (!query.trim()) {
-      // Se il campo è vuoto, ripristina le ricette originali
       setFilteredMeals(allMeals);
+      sessionStorage.removeItem("lastSearchTerm");
+      sessionStorage.removeItem("lastSearchResults");
       return;
     }
 
     setLoading(true);
     const results = await searchMealByName(query);
     setFilteredMeals(results || []);
+
+    // Salva la ricerca in sessionStorage
+    sessionStorage.setItem("lastSearchTerm", query);
+    sessionStorage.setItem("lastSearchResults", JSON.stringify(results || []));
+
     setLoading(false);
   };
 
@@ -85,7 +103,7 @@ const HomePage = () => {
       {!searchTerm && (
         <div className="flex justify-center mt-4">
           <label htmlFor="numMeals" className="flex items-center mr-2">
-            Quante ne vuoi visualizzare? 
+            Quante ne vuoi visualizzare?
           </label>
           <input
             id="numMeals"
@@ -109,21 +127,6 @@ const HomePage = () => {
           {filteredMeals.map((meal) => (
             <RecipeCard key={meal.idMeal} meal={meal} />
           ))}
-        </div>
-      )}
-
-      {/* Sezione newsletter (solo se non si sta cercando) */}
-      {!searchTerm && (
-        <div className="mt-8 text-center">
-          <h2 className="text-2xl font-bold">Iscriviti alla nostra Newsletter</h2>
-          <input
-            type="email"
-            placeholder="Inserisci la tua email"
-            className="p-2 mt-2 border border-gray-300 rounded"
-          />
-          <button className="p-2 ml-2 text-white bg-blue-500 rounded hover:bg-blue-600">
-            Iscriviti
-          </button>
         </div>
       )}
     </div>

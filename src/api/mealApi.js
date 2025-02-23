@@ -26,7 +26,7 @@ export const searchMealByName = async (name) => {
 export const getMealDetailsById = async (id) => {
   const cachedMeal = getMealFromCache(id);
   if (cachedMeal) {
-    return cachedMeal;
+    return cachedMeal; // Se è già in cache, usalo
   }
 
   try {
