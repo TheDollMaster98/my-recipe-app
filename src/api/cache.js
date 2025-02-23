@@ -1,32 +1,31 @@
 /**
  * Cache:
- * Utilizzata per memorizzare dati che possono essere riutilizzati in diverse sessioni dell'applicazione.
- * I dati rimangono disponibili solo durante l'esecuzione dell'app, ma vengono persi al refresh.
- * Ora utilizziamo `sessionStorage` per mantenere le ricette anche dopo il cambio di pagina.
+ * Mantiene i dati anche dopo il refresh usando `localStorage`,
+ * così le ricette non vengono perse e non serve rifare il fetch ad ogni avvio.
  */
 
 const mealCache = {};
 
 /**
- * Recupera un pasto dalla cache se disponibile.
+ * Recupera un pasto dalla cache o da `localStorage`.
  * @param {string} id - L'ID del pasto da recuperare.
- * @returns {object|null} - Restituisce i dati del pasto se presenti nella cache, altrimenti `null`.
+ * @returns {object|null} - Restituisce i dati del pasto se presenti nella cache o `localStorage`, altrimenti `null`.
  */
 export const getMealFromCache = (id) => {
   if (mealCache[id]) return mealCache[id]; // Controlla la cache in memoria
 
-  const storedMeal = sessionStorage.getItem(`meal_${id}`);
-  return storedMeal ? JSON.parse(storedMeal) : null; // Controlla sessionStorage
+  const storedMeal = localStorage.getItem(`meal_${id}`); // Usa localStorage invece di sessionStorage
+  return storedMeal ? JSON.parse(storedMeal) : null;
 };
 
 /**
- * Salva un pasto nella cache locale e in sessionStorage.
+ * Salva un pasto nella cache locale e in `localStorage`.
  * @param {string} id - L'ID del pasto da salvare nella cache.
  * @param {object} meal - L'oggetto contenente i dettagli del pasto.
  */
 export const setMealInCache = (id, meal) => {
   mealCache[id] = meal; // Salva in memoria
-  sessionStorage.setItem(`meal_${id}`, JSON.stringify(meal)); // Salva in sessionStorage
+  localStorage.setItem(`meal_${id}`, JSON.stringify(meal)); // Usa localStorage per mantenere i dati
 };
 
 /**
@@ -36,7 +35,7 @@ export const setMealInCache = (id, meal) => {
 export const getAllMealsFromCache = () => {
   return Object.values(mealCache).length > 0
     ? Object.values(mealCache)
-    : Object.keys(sessionStorage)
+    : Object.keys(localStorage) // Cambiato da `sessionStorage` a `localStorage`
         .filter((key) => key.startsWith("meal_"))
-        .map((key) => JSON.parse(sessionStorage.getItem(key)));
+        .map((key) => JSON.parse(localStorage.getItem(key)));
 };
