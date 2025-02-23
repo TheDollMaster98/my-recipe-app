@@ -14,14 +14,14 @@ const RecipeDetailPage = () => {
   const [ratingDifficolta, setRatingDifficolta] = useState(3);
   const [ratingGusto, setRatingGusto] = useState(3);
   const [commento, setCommento] = useState("");
-  const [user, setUser] = useState(null); // Usa uno stato per l'utente
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    console.log("🟢 Component Mounted - Recupero dati...");
+    console.log("Recupero dati...");
     
     const fetchMealDetails = async () => {
       const mealDetails = await getMealDetailsById(id);
-      console.log("📌 Ricetta caricata:", mealDetails);
+      console.log("Ricetta caricata:", mealDetails);
       setMeal(mealDetails);
 
       // Controlla se la ricetta è già salvata nel ricettario personale
@@ -39,7 +39,7 @@ const RecipeDetailPage = () => {
   useEffect(() => {
     const checkUser = () => {
       const loggedUser = getLoggedUser("user");
-      console.log("🔄 Cambiamento in sessionStorage, nuovo user:", loggedUser);
+      console.log("Cambiamento in sessionStorage, nuovo user:", loggedUser);
       setUser(loggedUser);
     };
 
@@ -62,9 +62,9 @@ const RecipeDetailPage = () => {
   const handleSubmitReview = (e) => {
     e.preventDefault();
     
-    console.log("📤 Tentativo di invio recensione...");
+    console.log("Tentativo di invio recensione...");
     if (!user) {
-      console.error("❌ ERRORE: Nessun utente loggato.");
+      console.error("ERRORE: Nessun utente loggato.");
       alert("Devi essere loggato per lasciare una recensione!");
       return;
     }
@@ -79,7 +79,7 @@ const RecipeDetailPage = () => {
     console.log("✅ Recensione salvata!");
 
     setReviews(getReviewsForMeal(id));
-    setCommento(""); 
+    setCommento("");
   };
 
   return (
@@ -112,18 +112,21 @@ const RecipeDetailPage = () => {
 
           <h3 className="mt-8 text-2xl font-bold">Recensioni</h3>
           {reviews.length > 0 ? (
-            <ul className="mt-4 space-y-4">
+            <div className="mt-4 space-y-4">
               {reviews.map((review, index) => (
-                <li key={index} className="p-4 bg-white rounded shadow">
-                  <strong>{review.username}</strong> - <span className="text-gray-600">{review.data}</span>
-                  <p>
-                    <span className="text-yellow-500 material-icons">star</span> Difficoltà: {review.ratingDifficolta} |{" "}
-                    <span className="text-yellow-500 material-icons">star</span> Gusto: {review.ratingGusto}
-                  </p>
-                  <p>{review.commento}</p>
-                </li>
+                <div key={index} className="p-4 bg-white rounded shadow">
+                  <div className="flex justify-between">
+                    <strong>{review.username}</strong>
+                    <span className="text-gray-600">{review.data}</span>
+                  </div>
+                  <div className="flex justify-start mt-2 space-x-4">
+                    <span className="text-yellow-500 material-icons">star</span> {review.ratingDifficolta}
+                    <span className="text-yellow-500 material-icons">star</span> {review.ratingGusto}
+                  </div>
+                  <div className="mt-2">{review.commento}</div>
+                </div>
               ))}
-            </ul>
+            </div>
           ) : (
             <p className="mt-2 text-gray-600">Nessuna recensione ancora.</p>
           )}
@@ -131,27 +134,29 @@ const RecipeDetailPage = () => {
           {user ? (
             <form className="p-4 mt-6 bg-white rounded shadow" onSubmit={handleSubmitReview}>
               <h3 className="text-lg font-semibold">Aggiungi una Recensione</h3>
-              <div className="flex mt-2">
-                <label className="mr-2">Difficoltà:</label>
-                <input
-                  type="number"
-                  min="1"
-                  max="5"
-                  value={ratingDifficolta}
-                  onChange={(e) => setRatingDifficolta(Number(e.target.value))}
-                  className="w-12 p-1 border border-gray-300 rounded"
-                />
-              </div>
-              <div className="flex mt-2">
-                <label className="mr-2">Gusto:</label>
-                <input
-                  type="number"
-                  min="1"
-                  max="5"
-                  value={ratingGusto}
-                  onChange={(e) => setRatingGusto(Number(e.target.value))}
-                  className="w-12 p-1 border border-gray-300 rounded"
-                />
+              <div className="flex items-center justify-start gap-2 mt-2">
+                <div className="flex items-center space-x-2">
+                  <label>Difficoltà:</label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="5"
+                    value={ratingDifficolta}
+                    onChange={(e) => setRatingDifficolta(Number(e.target.value))}
+                    className="w-12 p-1 border border-gray-300 rounded"
+                  />
+                </div>
+                <div className="flex items-center space-x-2">
+                  <label>Gusto:</label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="5"
+                    value={ratingGusto}
+                    onChange={(e) => setRatingGusto(Number(e.target.value))}
+                    className="w-12 p-1 border border-gray-300 rounded"
+                  />
+                </div>
               </div>
               <textarea
                 placeholder="Scrivi la tua recensione..."
@@ -159,7 +164,7 @@ const RecipeDetailPage = () => {
                 onChange={(e) => setCommento(e.target.value)}
                 className="w-full p-2 mt-2 border border-gray-300 rounded"
               />
-              <button type="submit" className="p-2 mt-3 text-white bg-blue-500 rounded hover:bg-blue-600">
+              <button type="submit" className="w-full p-2 mt-3 text-white bg-blue-500 rounded hover:bg-blue-600">
                 Invia Recensione
               </button>
             </form>
