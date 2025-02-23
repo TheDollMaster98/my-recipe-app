@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getLoggedUser, logoutUser, updateUserProfile } from "../api/session";
+import { getLoggedUser, logoutUser, updateUserProfile } from "../api/auth";
 import { useNavigate } from "react-router-dom";
 
 const UserProfilePage = () => {

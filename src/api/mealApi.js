@@ -1,4 +1,4 @@
-import { getMealFromCache, setMealInCache } from "./cache";
+import { getMealFromCache, setMealInCache } from "./storage";
 
 const BASE_URL = "https://www.themealdb.com/api/json/v1/1";
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getMealDetailsById } from "../api/mealApi";
-import { addRecipeToUser, removeRecipeFromUser, getUserRecipes } from "../api/session";
+import { addRecipeToUser, removeRecipeFromUser, getUserRecipes } from "../api/auth";
 
 const RecipeDetailPage = () => {
   const { id } = useParams(); // Ottiene l'ID della ricetta dai parametri URL

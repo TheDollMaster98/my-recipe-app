@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getUserRecipes } from "../api/session";
+import { getUserRecipes } from "../api/auth";
 import RecipeCard from "../components/RecipeCard";
 
 const SavedRecipesPage = () => {

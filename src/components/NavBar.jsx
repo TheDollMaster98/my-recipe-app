@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "material-icons/iconfont/material-icons.css";
 import logo from "../assets/logo.webp";
-import { getSessionData } from "../api/session"; // Importa la funzione per ottenere i dati della sessione
+import { getSessionData } from "../api/auth"; // Importa la funzione per ottenere i dati della sessione
 
 const NavBar = () => {
   const user = getSessionData("user"); // Controlla se l'utente è loggato

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { getUserRecipes, addRecipeToUser, removeRecipeFromUser } from "../api/session";
+import { getUserRecipes, addRecipeToUser, removeRecipeFromUser } from "../api/auth";
 
 // ho dovuto fare così perché non posso mettere il onRecipeChange? come in TS:
 const RecipeCard = ({ meal, onRecipeChange }) => {

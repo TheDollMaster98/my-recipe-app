@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { getRandomMeal } from "../api/mealApi";
 import RecipeCard from "../components/RecipeCard";
-import { setMealInCache, getAllMealsFromCache } from "../api/cache"; // Importa la cache
+import { setMealInCache, getAllMealsFromCache } from "../api/storage"; // Importa la cache
 
 const HomePage = () => {
   const [allMeals, setAllMeals] = useState([]);
