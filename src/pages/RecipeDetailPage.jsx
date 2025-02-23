@@ -1,59 +1,59 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getMealDetailsById } from "../api/mealApi";
+import { addRecipeToUser, removeRecipeFromUser, getUserRecipes } from "../api/session";
 
 const RecipeDetailPage = () => {
-  const { id } = useParams(); // Ottieni l'ID della ricetta dai parametri URL
-  const navigate = useNavigate(); // Hook per la navigazione
+  const { id } = useParams(); // Ottiene l'ID della ricetta dai parametri URL
+  const navigate = useNavigate();
   const [meal, setMeal] = useState(null);
-  const backButtonRef = useRef(null); // Riferimento per la freccia "Torna Indietro"
-
-  const fetchMealDetails = async () => {
-    const mealDetails = await getMealDetailsById(id);
-    setMeal(mealDetails);
-  };
+  const [isSaved, setIsSaved] = useState(false);
 
   useEffect(() => {
+    const fetchMealDetails = async () => {
+      const mealDetails = await getMealDetailsById(id);
+      setMeal(mealDetails);
+
+      // Controlla se la ricetta è già salvata nel ricettario personale
+      const userRecipes = getUserRecipes();
+      setIsSaved(userRecipes.some((r) => r.idMeal === id));
+    };
+
     fetchMealDetails();
   }, [id]);
 
-  useEffect(() => {
-    // Scorri verso l'alto quando il componente viene montato
-    window.scrollTo(0, 0);
-  }, [meal]);
-
-  const handleGoBack = () => {
-    navigate(-1); // Torna indietro
-    fetchMealDetails(); // Ricarica i dettagli della ricetta
+  const handleToggleRecipe = () => {
+    if (isSaved) {
+      removeRecipeFromUser(meal.idMeal);
+      setIsSaved(false);
+    } else {
+      addRecipeToUser(meal);
+      setIsSaved(true);
+    }
   };
 
-  if (!meal) {
-    return <div>Caricamento...</div>;
-  }
-
   return (
-    <div className="min-h-screen p-4 bg-white-1">
-      <div
-        ref={backButtonRef} // Aggiungi il riferimento qui
-        onClick={handleGoBack}
-        className="flex items-center p-2 mb-4 text-black cursor-pointer"
-      >
-        <span className="mt-1 material-icons">arrow_back</span>
-        <span className="ml-2 font-bold">Torna Indietro</span>
-      </div>
-      <div className="p-8 bg-white rounded shadow-lg">
-        <img
-          src={meal.strMealThumb}
-          alt={meal.strMeal}
-          className="object-cover w-full mb-4 rounded h-96"
-        />
-        <h2 className="mt-6 text-3xl font-bold">{meal.strMeal}</h2>
-        <p className="mt-2 text-lg text-gray-600">
-          Categoria: {meal.strCategory}
-        </p>
-        <h3 className="mt-6 text-2xl font-bold">Procedura</h3>
-        <p className="mt-4 text-base">{meal.strInstructions}</p>
-      </div>
+    <div className="min-h-screen p-4 bg-white">
+      {meal ? (
+        <div className="p-8 bg-white rounded shadow-lg">
+          <img src={meal.strMealThumb} alt={meal.strMeal} className="object-cover w-full mb-4 rounded h-96" />
+          <h2 className="mt-6 text-3xl font-bold">{meal.strMeal}</h2>
+          <p className="mt-2 text-lg text-gray-600">Categoria: {meal.strCategory}</p>
+
+          {/* Bottone per aggiungere o rimuovere la ricetta */}
+          <button
+            onClick={handleToggleRecipe}
+            className={`w-full p-3 mt-4 rounded-lg ${isSaved ? "bg-red-500 hover:bg-red-600" : "bg-green-500 hover:bg-green-600"} text-white`}
+          >
+            {isSaved ? "Rimuovi dal Ricettario" : "Aggiungi al Ricettario"}
+          </button>
+
+          <h3 className="mt-6 text-2xl font-bold">Procedura</h3>
+          <p className="mt-4 text-base">{meal.strInstructions}</p>
+        </div>
+      ) : (
+        <p>Caricamento...</p>
+      )}
     </div>
   );
 };
