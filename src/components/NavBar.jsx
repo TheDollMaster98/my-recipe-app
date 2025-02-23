@@ -31,12 +31,6 @@ const NavBar = () => {
                 restaurant_menu
               </span>
             </Link>
-            <Link
-              to="/search"
-              className="flex items-center pl-3 text-white no-underline"
-            >
-              <span className="align-middle material-icons">search</span>
-            </Link>
 
             {user ? (
               <Link to="/profile" className="text-white">

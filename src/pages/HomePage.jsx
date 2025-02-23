@@ -63,15 +63,18 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen p-4 mx-auto bg-black-1">
-      {/* 🔹 Barra di ricerca */}
-      <div className="flex justify-center mb-6">
-        <input
-          type="text"
-          placeholder="Cerca una ricetta..."
-          value={searchTerm}
-          onChange={handleSearch}
-          className="p-2 border border-gray-300 rounded w-80 focus:outline-none"
-        />
+      {/* 🔹 Barra di ricerca con icona */}
+      <div className="flex items-center justify-center mb-6">
+        <div className="relative flex items-center">
+          <input
+            type="text"
+            placeholder="Cerca una ricetta..."
+            value={searchTerm}
+            onChange={handleSearch}
+            className="p-2 pl-10 border border-gray-300 rounded w-80 focus:outline-none"
+          />
+          <span className="absolute text-gray-500 left-3 material-icons">search</span>
+        </div>
       </div>
 
       <h2 className="text-2xl font-bold text-center">
@@ -81,7 +84,9 @@ const HomePage = () => {
       {/* 🔹 Numero di ricette visualizzate (solo se non si sta cercando) */}
       {!searchTerm && (
         <div className="flex justify-center mt-4">
-          <label htmlFor="numMeals" className="mr-2">Quante ne vuoi visualizzare?</label>
+          <label htmlFor="numMeals" className="flex items-center mr-2">
+            Quante ne vuoi visualizzare? 
+          </label>
           <input
             id="numMeals"
             type="number"
