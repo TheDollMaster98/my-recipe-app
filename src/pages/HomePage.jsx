@@ -1,56 +1,44 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { getRandomMeal } from "../api/mealApi";
 import RecipeCard from "../components/RecipeCard";
-import { setMealInCache, getMealFromCache } from "../api/cache"; // Importa le funzioni di caching
+import { setMealInCache, getAllMealsFromCache } from "../api/cache"; // Importa la cache
 
 const HomePage = () => {
   const [allMeals, setAllMeals] = useState([]);
   const [numMeals, setNumMeals] = useState(25);
   const [loading, setLoading] = useState(true); // Stato di caricamento
 
-  // UseEffect esegue la funzione fetchInitialMeals solo al montaggio del componente
   useEffect(() => {
     const fetchInitialMeals = async () => {
-      const cachedMeals = []; // Array per memorizzare i pasti dalla cache
-
-      // Controlla se ci sono pasti nella cache
-      for (let i = 0; i < numMeals; i++) {
-        const meal = getMealFromCache(i + 1); // Supponendo che gli ID dei pasti siano sequenziali
-        if (meal) {
-          cachedMeals.push(meal);
-        }
-      }
+      const cachedMeals = getAllMealsFromCache(); // Recupera i pasti salvati
 
       if (cachedMeals.length > 0) {
         setAllMeals(cachedMeals);
-        setLoading(false); // Nascondi il loader
+        setLoading(false);
       } else {
-        const mealPromises = Array.from({ length: numMeals }, () =>
-          getRandomMeal()
-        );
+        const mealPromises = Array.from({ length: numMeals }, () => getRandomMeal());
         const results = await Promise.all(mealPromises);
         setAllMeals(results);
-        results.forEach((meal) => setMealInCache(meal.idMeal, meal)); // Memorizza nella cache
-        setLoading(false); // Nascondi il loader
+        results.forEach((meal) => setMealInCache(meal.idMeal, meal));
+        setLoading(false);
       }
     };
 
     fetchInitialMeals();
-  }, [numMeals]);
+  }, [numMeals]); // ✅ Dipendenza rimane `numMeals`
+
+  // Funzione per aggiungere un nuovo pasto
+  const addRandomMeal = useCallback(async () => {
+    const newMeal = await getRandomMeal();
+    setAllMeals((prevMeals) => [...prevMeals, newMeal]);
+    setMealInCache(newMeal.idMeal, newMeal);
+  }, []);
 
   useEffect(() => {
-    const addRandomMeal = async () => {
-      const newMeal = await getRandomMeal();
-      setAllMeals((prevMeals) => [...prevMeals, newMeal]);
-      setMealInCache(newMeal.idMeal, newMeal); // Memorizza il nuovo pasto nella cache
-    };
-
     if (allMeals.length < numMeals) {
       addRandomMeal();
     }
-    console.log("allMeals => ");
-    console.log(allMeals);
-  }, [numMeals, allMeals.length]); // Esegui quando numMeals cambia
+  }, [numMeals, allMeals, addRandomMeal]);
 
   return (
     <div className="min-h-screen bg-black-1">
@@ -71,7 +59,7 @@ const HomePage = () => {
           />
         </div>
 
-        {loading ? ( // Mostra il loader se loading è true
+        {loading ? (
           <div className="flex justify-center mt-4">
             <span className="material-icons animate-spin">hourglass_empty</span>{" "}
             {/* Icona di caricamento */}

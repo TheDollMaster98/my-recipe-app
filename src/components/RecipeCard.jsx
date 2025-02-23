@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { getUserRecipes, addRecipeToUser, removeRecipeFromUser } from "../api/session";
 
 // ho dovuto fare così perché non posso mettere il onRecipeChange? come in TS:
-const RecipeCard = ({ meal, onRecipeChange = () => {} }) => {
+const RecipeCard = ({ meal, onRecipeChange }) => {
 
   const [isFavorite, setIsFavorite] = useState(false);
 
@@ -23,9 +23,9 @@ const RecipeCard = ({ meal, onRecipeChange = () => {} }) => {
       addRecipeToUser(meal);
       setIsFavorite(true);
     }
-
-    onRecipeChange(); // Notifica il cambiamento
-  };
+    // Notifica il cambiamento
+    onRecipeChange?.(); // Se `onRecipeChange` esiste, viene eseguito, altrimenti niente errore
+     };
 
   return (
     <div className="relative block overflow-hidden transition-all transform bg-white rounded-lg shadow-lg hover:scale-105 hover:shadow-xl">
