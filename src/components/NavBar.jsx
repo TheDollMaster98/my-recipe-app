@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo.webp";
-import { getLocalData } from "../api/auth";
+import { getLoggedUser } from "../api/auth";
 
 const NavBar = () => {
-  const [user, setUser] = useState(getLocalData("user")); // Ora usa localStorage
+  const [user, setUser] = useState(getLoggedUser()); 
 
   useEffect(() => {
     const updateUser = () => {
-      const loggedUser = getLocalData("user");
+      const loggedUser = getLoggedUser();
       console.log("Navbar aggiornata, nuovo user:", loggedUser);
       setUser(loggedUser);
     };
-
-    window.addEventListener("storage", updateUser); // Rileva cambiamenti in localStorage
+    
+    // Rileva cambiamenti in localStorage
+    window.addEventListener("storage", updateUser); 
 
     return () => {
       window.removeEventListener("storage", updateUser);
@@ -43,7 +44,6 @@ const NavBar = () => {
               <span className="align-middle material-icons">bug_report</span>
             </Link>
 
-            {/* Login/Profilo */}
             {user ? (
               <Link to="/profile" className="flex items-center text-white no-underline">
                 <span className="align-middle material-icons">person</span>

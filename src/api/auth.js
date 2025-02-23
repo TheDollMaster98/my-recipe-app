@@ -79,7 +79,7 @@ export const logoutUser = () => {
 };
 
 /**
- * Ottiene i dati dell'utente attualmente loggato.
+ * Ottiene i dati dell'utente attualmente loggato. Usa localStorage per mantenere il login
  * @returns {object|null} - Oggetto con i dati dell'utente o `null` se nessun utente è loggato.
  */
 export const getLoggedUser = () => {
