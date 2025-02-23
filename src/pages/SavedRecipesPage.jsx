@@ -4,10 +4,15 @@ import RecipeCard from "../components/RecipeCard";
 
 const SavedRecipesPage = () => {
   const [savedRecipes, setSavedRecipes] = useState([]);
+  const [refresh, setRefresh] = useState(false); // Trigger per aggiornare la UI
 
   useEffect(() => {
-    setSavedRecipes(getUserRecipes()); // Carica le ricette salvate all'avvio
-  }, []);
+    setSavedRecipes(getUserRecipes()); // Aggiorna quando cambia refresh
+  }, [refresh]);
+
+  const handleRecipeChange = () => {
+    setRefresh((prev) => !prev); // Cambia lo stato per forzare il re-render
+  };
 
   return (
     <div className="min-h-screen p-6 bg-gray-100">
@@ -16,7 +21,7 @@ const SavedRecipesPage = () => {
       {savedRecipes.length > 0 ? (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {savedRecipes.map((meal) => (
-            <RecipeCard key={meal.idMeal} meal={meal} />
+            <RecipeCard key={meal.idMeal} meal={meal} onRecipeChange={handleRecipeChange} />
           ))}
         </div>
       ) : (

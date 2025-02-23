@@ -36,6 +36,14 @@ const RecipeDetailPage = () => {
     <div className="min-h-screen p-4 bg-white">
       {meal ? (
         <div className="p-8 bg-white rounded shadow-lg">
+          {/* Bottone Torna Indietro */}
+          <button
+            onClick={() => navigate(-1)}
+            className="flex items-center px-4 py-2 mb-4 text-white transition-all bg-gray-500 rounded-lg hover:bg-gray-600"
+          >
+            <span className="mr-2 material-icons">arrow_back</span> Torna Indietro
+          </button>
+
           <img src={meal.strMealThumb} alt={meal.strMeal} className="object-cover w-full mb-4 rounded h-96" />
           <h2 className="mt-6 text-3xl font-bold">{meal.strMeal}</h2>
           <p className="mt-2 text-lg text-gray-600">Categoria: {meal.strCategory}</p>
@@ -43,7 +51,9 @@ const RecipeDetailPage = () => {
           {/* Bottone per aggiungere o rimuovere la ricetta */}
           <button
             onClick={handleToggleRecipe}
-            className={`w-full p-3 mt-4 rounded-lg ${isSaved ? "bg-red-500 hover:bg-red-600" : "bg-green-500 hover:bg-green-600"} text-white`}
+            className={`w-full p-3 mt-4 rounded-lg ${
+              isSaved ? "bg-red-500 hover:bg-red-600" : "bg-green-500 hover:bg-green-600"
+            } text-white transition-all`}
           >
             {isSaved ? "Rimuovi dal Ricettario" : "Aggiungi al Ricettario"}
           </button>

@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getUserRecipes, addRecipeToUser, removeRecipeFromUser } from "../api/session";
 
-const RecipeCard = ({ meal }) => {
+// ho dovuto fare così perché non posso mettere il onRecipeChange? come in TS:
+const RecipeCard = ({ meal, onRecipeChange = () => {} }) => {
+
   const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
@@ -16,11 +18,13 @@ const RecipeCard = ({ meal }) => {
 
     if (isFavorite) {
       removeRecipeFromUser(meal.idMeal);
+      setIsFavorite(false);
     } else {
       addRecipeToUser(meal);
+      setIsFavorite(true);
     }
 
-    setIsFavorite(!isFavorite);
+    onRecipeChange(); // Notifica il cambiamento
   };
 
   return (
@@ -37,7 +41,7 @@ const RecipeCard = ({ meal }) => {
         {/* Pulsante Cuore */}
         <button
           onClick={handleToggleFavorite}
-          className="flex items-center justify-center w-full mt-3 transition-all transform hover:scale-110"
+          className="flex items-center justify-center w-full mt-3"
         >
           <span
             className={`material-icons text-4xl transition-colors duration-300 ${
