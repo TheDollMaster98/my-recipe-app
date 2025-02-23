@@ -6,6 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import UserProfilePage from "./pages/UserProfilePage";
 import RecipeDetailPage from "./pages/RecipeDetailPage";
 import SavedRecipesPage from "./pages/SavedRecipesPage";
+import "material-icons/iconfont/material-icons.css";
 
 function App() {
   return (

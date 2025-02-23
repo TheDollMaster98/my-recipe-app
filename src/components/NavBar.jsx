@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "material-icons/iconfont/material-icons.css";
 import logo from "../assets/logo.webp";
 import { getSessionData } from "../api/auth"; // Importa la funzione per ottenere i dati della sessione
 
