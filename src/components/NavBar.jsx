@@ -10,14 +10,14 @@ const NavBar = () => {
     <div className="sticky top-0 left-0 z-50 w-full bg-bg-black-1">
       <nav className="p-4">
         <div className="flex items-center justify-between">
-          {/* 🔹 Logo + Nome */}
+          {/* Logo + Nome */}
           <Link to="/" className="flex items-center text-white no-underline">
             <h1 className="mr-2 text-2xl font-bold text-white">PGRC</h1>
             <img src={logo} alt="logo" className="w-10 h-10" />
             {user && <h4 className="ml-1">Ciao {user.username}!</h4>}
           </Link>
 
-          {/* 🔹 Menu di navigazione */}
+          {/* Menu di navigazione */}
           <div className="flex ml-auto space-x-3">
             <Link to="/" className="flex items-center text-white no-underline">
               <span className="align-middle material-icons">home</span>
@@ -29,7 +29,7 @@ const NavBar = () => {
               <span className="align-middle material-icons">bug_report</span>
             </Link>
 
-            {/* 🔹 Login/Profilo */}
+            {/* Login/Profilo */}
             {user ? (
               <Link to="/profile" className="flex items-center text-white no-underline">
                 <span className="align-middle material-icons">person</span>
