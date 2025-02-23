@@ -124,3 +124,66 @@ export const updateUserProfile = (newUsername) => {
   }
   return { success: false, message: "Nessun utente loggato." };
 };
+
+/**
+ * Funzione per recuperare il ricettario personale dell'utente loggato.
+ * @returns {Array} - Restituisce un array di ricette salvate, oppure un array vuoto se non ci sono ricette.
+ */
+export const getUserRecipes = () => {
+  const user = getLoggedUser();
+  if (!user) return [];
+  return getLocalData(`recipes_${user.email}`) || [];
+};
+
+/**
+ * Aggiunge una ricetta al ricettario personale dell'utente.
+ * @param {object} meal - L'oggetto contenente i dettagli della ricetta.
+ * @returns {object} - Oggetto con `success` (true/false) e `message`.
+ */
+export const addRecipeToUser = (meal) => {
+  const user = getLoggedUser();
+  if (!user)
+    return {
+      success: false,
+      message: "Devi essere loggato per aggiungere una ricetta!",
+    };
+
+  let userRecipes = getUserRecipes();
+  if (userRecipes.some((r) => r.idMeal === meal.idMeal)) {
+    return {
+      success: false,
+      message: "Questa ricetta è già nel tuo ricettario!",
+    };
+  }
+
+  userRecipes.push(meal);
+  setLocalData(`recipes_${user.email}`, userRecipes);
+  return { success: true, message: "Ricetta aggiunta con successo!" };
+};
+
+/**
+ * Rimuove una ricetta dal ricettario personale dell'utente.
+ * @param {string} mealId - L'ID della ricetta da rimuovere.
+ * @returns {object} - Oggetto con `success` (true/false) e `message`.
+ */
+export const removeRecipeFromUser = (mealId) => {
+  const user = getLoggedUser();
+  if (!user)
+    return {
+      success: false,
+      message: "Devi essere loggato per rimuovere una ricetta!",
+    };
+
+  let userRecipes = getUserRecipes();
+  const updatedRecipes = userRecipes.filter((r) => r.idMeal !== mealId);
+
+  if (userRecipes.length === updatedRecipes.length) {
+    return {
+      success: false,
+      message: "La ricetta non è presente nel tuo ricettario!",
+    };
+  }
+
+  setLocalData(`recipes_${user.email}`, updatedRecipes);
+  return { success: true, message: "Ricetta rimossa con successo!" };
+};

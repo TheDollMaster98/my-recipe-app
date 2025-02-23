@@ -5,6 +5,7 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import UserProfilePage from "./pages/UserProfilePage";
 import RecipeDetailPage from "./pages/RecipeDetailPage";
+import SavedRecipesPage from "./pages/SavedRecipesPage";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/profile" element={<UserProfilePage />} />
+          <Route path="/recipe" element={<SavedRecipesPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/recipe/:id" element={<RecipeDetailPage />} />
         </Routes>
