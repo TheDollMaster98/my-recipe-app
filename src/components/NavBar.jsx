@@ -1,10 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo.webp";
-import { getSessionData } from "../api/auth"; // Ottiene i dati della sessione
+import { getLocalData } from "../api/auth";
 
 const NavBar = () => {
-  const user = getSessionData("user"); // Controlla se l'utente è loggato
+  const [user, setUser] = useState(getLocalData("user")); // Ora usa localStorage
+
+  useEffect(() => {
+    const updateUser = () => {
+      const loggedUser = getLocalData("user");
+      console.log("Navbar aggiornata, nuovo user:", loggedUser);
+      setUser(loggedUser);
+    };
+
+    window.addEventListener("storage", updateUser); // Rileva cambiamenti in localStorage
+
+    return () => {
+      window.removeEventListener("storage", updateUser);
+    };
+  }, []);
 
   return (
     <div className="sticky top-0 left-0 z-50 w-full bg-bg-black-1">

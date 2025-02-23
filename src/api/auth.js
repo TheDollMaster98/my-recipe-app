@@ -1,27 +1,6 @@
 /**
- * Sessione:
- * Utilizzata per memorizzare dati solo per la durata della sessione dell'utente.
- * I dati vengono rimossi quando l'utente chiude il browser o la scheda.
- * È utile per dati temporanei che non devono persistere oltre la sessione attuale.
+ * Gestione dello stato utente: login, registrazione, gestione delle ricette salvate
  */
-
-// SESSION STORAGE:
-
-// Funzione per memorizzare i dati in sessionStorage
-export const setSessionData = (key, data) => {
-  sessionStorage.setItem(key, JSON.stringify(data));
-};
-
-// Funzione per recuperare i dati da sessionStorage
-export const getSessionData = (key) => {
-  const data = sessionStorage.getItem(key);
-  return data ? JSON.parse(data) : null;
-};
-
-// Funzione per rimuovere i dati da sessionStorage
-export const removeSessionData = (key) => {
-  sessionStorage.removeItem(key);
-};
 
 // LOCAL STORAGE:
 
@@ -75,9 +54,11 @@ export const loginUser = (email, password) => {
   const user = users.find((u) => u.email === email && u.password === password);
 
   if (user) {
-    setLocalData("loggedUser", user); // Salva lo stato di login in localStorage
+    setLocalData("user", user);
+    console.log("Login effettuato! Utente salvato in localStorage:", user);
     return { success: true, user };
   }
+  console.log("Login fallito: Credenziali errate!");
   return { success: false, message: "Credenziali errate!" };
 };
 
@@ -86,14 +67,15 @@ export const loginUser = (email, password) => {
  * @returns {boolean} - Restituisce `true` se un utente è loggato, `false` altrimenti.
  */
 export const isUserLoggedIn = () => {
-  return getLocalData("loggedUser") !== null;
+  return getLocalData("user") !== null;
 };
 
 /**
- * Effettua il logout dell'utente rimuovendo i dati da localStorage.
+ * Effettua il logout dell'utente rimuovendo i dati dal localStorage.
  */
 export const logoutUser = () => {
-  removeLocalData("loggedUser");
+  removeLocalData("user");
+  console.log("Logout effettuato. L'utente è stato rimosso.");
 };
 
 /**
@@ -101,7 +83,7 @@ export const logoutUser = () => {
  * @returns {object|null} - Oggetto con i dati dell'utente o `null` se nessun utente è loggato.
  */
 export const getLoggedUser = () => {
-  return getLocalData("loggedUser");
+  return getLocalData("user");
 };
 
 /**
@@ -113,9 +95,8 @@ export const updateUserProfile = (newUsername) => {
   let user = getLoggedUser();
   if (user) {
     user.username = newUsername;
-    setLocalData("loggedUser", user); // Aggiorna localStorage con il nuovo nome utente
+    setLocalData("user", user);
 
-    // Aggiorna anche nell'array degli utenti registrati
     let users = getLocalData("users") || [];
     users = users.map((u) => (u.email === user.email ? user : u));
     setLocalData("users", users);

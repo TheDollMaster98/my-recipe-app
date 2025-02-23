@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { getLocalData, getSessionData } from "../api/auth"; 
+import { getLocalData, getLoggedUser } from "../api/auth"; 
 import { getAllMealsFromCache } from "../api/storage"; 
+
 
 const DebugPage = () => {
   const [localStorageData, setLocalStorageData] = useState(getLocalData("users") || {});
-  const [sessionStorageData, setSessionStorageData] = useState(getSessionData("user") || {});
+  const [sessionStorageData, setSessionStorageData] = useState(getLoggedUser("user") || {});
   const [cachedMeals, setCachedMeals] = useState(getAllMealsFromCache());
 
   // Funzione per cancellare i dati

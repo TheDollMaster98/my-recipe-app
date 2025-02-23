@@ -8,32 +8,38 @@ const UserProfilePage = () => {
   const [newUsername, setNewUsername] = useState("");
 
   useEffect(() => {
-    const loggedUser = getLoggedUser();
-    if (loggedUser) {
-      setUser(loggedUser);
-      setNewUsername(loggedUser.username);
-    } else {
+    const loggedUser = getLoggedUser("user");
+    console.log("🔹 Utente caricato nel profilo:", loggedUser);
+
+    if (!loggedUser) {
+      console.warn("⚠️ Nessun utente trovato, reindirizzamento a /login");
       navigate("/login");
+    } else {
+      setUser(loggedUser);
+      setNewUsername(loggedUser.username); // Inizializza il campo di input con il nome attuale
     }
   }, [navigate]);
 
   const handleLogout = () => {
     logoutUser();
+    console.log("🚪 Logout effettuato!");
     navigate("/login");
   };
 
   const handleUpdateUsername = () => {
-    if (newUsername.trim() === "") {
-      alert("Il nickname non può essere vuoto!");
+    if (!newUsername.trim()) {
+      alert("Il nome utente non può essere vuoto!");
       return;
     }
+
     const result = updateUserProfile(newUsername);
-    alert(result.message);
     if (result.success) {
-      setUser({ ...user, username: newUsername }); // Aggiorna lo stato della pagina
+      setUser(getLoggedUser("user")); // Aggiorna lo stato con il nuovo utente
+      console.log("✅ Nome utente aggiornato:", newUsername);
+    } else {
+      alert(result.message);
     }
   };
-
   return (
     <div className="flex flex-col items-center min-h-screen p-6 bg-gray-100">
       <h2 className="mb-6 text-3xl font-bold text-black">Profilo Utente</h2>
