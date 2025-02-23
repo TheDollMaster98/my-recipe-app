@@ -7,6 +7,7 @@ import UserProfilePage from "./pages/UserProfilePage";
 import RecipeDetailPage from "./pages/RecipeDetailPage";
 import SavedRecipesPage from "./pages/SavedRecipesPage";
 import "material-icons/iconfont/material-icons.css";
+import DebugPage from "./pages/DebugPage";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/profile" element={<UserProfilePage />} />
           <Route path="/recipe" element={<SavedRecipesPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/debug" element={<DebugPage />} />
           <Route path="/recipe/:id" element={<RecipeDetailPage />} />
         </Routes>
       </div>

@@ -63,7 +63,7 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen p-4 mx-auto bg-black-1">
-      {/* 🔹 Barra di ricerca con icona */}
+      {/* Barra di ricerca con icona */}
       <div className="flex items-center justify-center mb-6">
         <div className="relative flex items-center">
           <input
@@ -81,7 +81,7 @@ const HomePage = () => {
         {searchTerm ? "Risultati della ricerca" : "Ricette Popolari"}
       </h2>
 
-      {/* 🔹 Numero di ricette visualizzate (solo se non si sta cercando) */}
+      {/* Numero di ricette visualizzate (solo se non si sta cercando) */}
       {!searchTerm && (
         <div className="flex justify-center mt-4">
           <label htmlFor="numMeals" className="flex items-center mr-2">
@@ -99,7 +99,7 @@ const HomePage = () => {
         </div>
       )}
 
-      {/* 🔹 Loading */}
+      {/* Loading */}
       {loading ? (
         <div className="flex justify-center mt-4">
           <span className="material-icons animate-spin">hourglass_empty</span>
@@ -112,7 +112,7 @@ const HomePage = () => {
         </div>
       )}
 
-      {/* 🔹 Sezione newsletter (solo se non si sta cercando) */}
+      {/* Sezione newsletter (solo se non si sta cercando) */}
       {!searchTerm && (
         <div className="mt-8 text-center">
           <h2 className="text-2xl font-bold">Iscriviti alla nostra Newsletter</h2>
