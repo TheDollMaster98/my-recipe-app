@@ -35,7 +35,7 @@ const UserProfilePage = () => {
     const result = updateUserProfile(newUsername);
     if (result.success) {
       setUser(getLoggedUser("user")); // Aggiorna lo stato con il nuovo utente
-      console.log("✅ Nome utente aggiornato:", newUsername);
+      console.log("Nome utente aggiornato:", newUsername);
     } else {
       alert(result.message);
     }
