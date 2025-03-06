@@ -4,7 +4,7 @@ import logo from "../assets/logo.webp";
 import { getLoggedUser } from "../api/auth";
 
 const NavBar = () => {
-  const [user, setUser] = useState(getLoggedUser()); 
+  const [user, setUser] = useState(getLoggedUser());
 
   useEffect(() => {
     const updateUser = () => {
@@ -12,12 +12,12 @@ const NavBar = () => {
       console.log("Navbar aggiornata, nuovo user:", loggedUser);
       setUser(loggedUser);
     };
-    
-    // Rileva cambiamenti in localStorage
-    window.addEventListener("storage", updateUser); 
+
+    // Ascolta il nuovo evento "userUpdated"
+    window.addEventListener("userUpdated", updateUser);
 
     return () => {
-      window.removeEventListener("storage", updateUser);
+      window.removeEventListener("userUpdated", updateUser);
     };
   }, []);
 

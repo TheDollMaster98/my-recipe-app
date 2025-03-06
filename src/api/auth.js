@@ -101,6 +101,9 @@ export const updateUserProfile = (newUsername) => {
     users = users.map((u) => (u.email === user.email ? user : u));
     setLocalData("users", users);
 
+    // Trigger evento personalizzato per notificare il cambio di username
+    window.dispatchEvent(new Event("userUpdated"));
+
     return { success: true, message: "Nickname aggiornato!" };
   }
   return { success: false, message: "Nessun utente loggato." };
