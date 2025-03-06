@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { getRandomMeal, searchMealByName } from "../api/mealApi";
+import { getRandomMeal, searchMealByName, getAllCategories } from "../api/mealApi";
 import RecipeCard from "../components/RecipeCard";
 import { setMealInCache, getAllMealsFromCache } from "../api/storage";
 
@@ -9,23 +9,22 @@ const HomePage = () => {
   const [numMeals, setNumMeals] = useState(25);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState(""); // Stato per il valore della ricerca
+  const [categories, setCategories] = useState([]); // Tutte le categorie
+  const [selectedCategories, setSelectedCategories] = useState([]); // Categorie filtrate
 
-  // Recupera i dati salvati in sessionStorage quando la pagina viene caricata
+  // Recupera le categorie disponibili
   useEffect(() => {
-    const savedSearchTerm = sessionStorage.getItem("lastSearchTerm");
-    const savedSearchResults = sessionStorage.getItem("lastSearchResults");
-
-    if (savedSearchTerm && savedSearchResults) {
-      setSearchTerm(savedSearchTerm);
-      setFilteredMeals(JSON.parse(savedSearchResults));
-      setLoading(false);
-    } else {
-      fetchInitialMeals();
-    }
+    const fetchCategories = async () => {
+      const categoryList = await getAllCategories();
+      if (categoryList) {
+        setCategories(categoryList.map((c) => c.strCategory)); // Usa solo i nomi delle categorie
+      }
+    };
+    fetchCategories();
   }, []);
 
   // Funzione per caricare le ricette iniziali
-  const fetchInitialMeals = async () => {
+  const fetchInitialMeals = useCallback(async () => {
     const cachedMeals = getAllMealsFromCache();
     if (cachedMeals.length >= numMeals) {
       setAllMeals(cachedMeals);
@@ -40,21 +39,11 @@ const HomePage = () => {
     setFilteredMeals(results);
     results.forEach((meal) => setMealInCache(meal.idMeal, meal));
     setLoading(false);
-  };
-
-  // Funzione per aggiungere nuovi pasti se richiesto
-  const addRandomMeal = useCallback(async () => {
-    const newMeal = await getRandomMeal();
-    setAllMeals((prevMeals) => [...prevMeals, newMeal]);
-    setFilteredMeals((prevMeals) => [...prevMeals, newMeal]); // Aggiorna anche i risultati visibili
-    setMealInCache(newMeal.idMeal, newMeal);
-  }, []);
+  }, [numMeals]);
 
   useEffect(() => {
-    if (allMeals.length < numMeals) {
-      addRandomMeal();
-    }
-  }, [numMeals, allMeals, addRandomMeal]);
+    fetchInitialMeals();
+  }, [fetchInitialMeals]);
 
   // Funzione di ricerca
   const handleSearch = async (e) => {
@@ -63,24 +52,33 @@ const HomePage = () => {
 
     if (!query.trim()) {
       setFilteredMeals(allMeals);
-      sessionStorage.removeItem("lastSearchTerm");
-      sessionStorage.removeItem("lastSearchResults");
       return;
     }
 
     setLoading(true);
     const results = await searchMealByName(query);
     setFilteredMeals(results || []);
-
-    // Salva la ricerca in sessionStorage
-    sessionStorage.setItem("lastSearchTerm", query);
-    sessionStorage.setItem("lastSearchResults", JSON.stringify(results || []));
-
     setLoading(false);
   };
 
+  // Gestisce il cambio di selezione delle categorie
+  const handleCategoryChange = (category) => {
+    setSelectedCategories((prev) =>
+      prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]
+    );
+  };
+
+  // Filtra i pasti in base alle categorie selezionate
+  useEffect(() => {
+    if (selectedCategories.length === 0) {
+      setFilteredMeals(allMeals);
+    } else {
+      setFilteredMeals(allMeals.filter((meal) => selectedCategories.includes(meal.strCategory)));
+    }
+  }, [selectedCategories, allMeals]);
+
   return (
-    <div className="min-h-screen p-4 mx-auto bg-black-1">
+    <div className="min-h-screen p-4 mx-auto bg-gray-100">
       {/* Barra di ricerca con icona */}
       <div className="flex items-center justify-center mb-6">
         <div className="relative flex items-center">
@@ -93,6 +91,23 @@ const HomePage = () => {
           />
           <span className="absolute text-gray-500 left-3 material-icons">search</span>
         </div>
+      </div>
+
+      {/* Selezione delle categorie con checkbox */}
+      <h3 className="mt-4 text-lg font-semibold text-center">Filtra per Categoria</h3>
+      <div className="grid grid-cols-2 gap-4 my-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6">
+        {categories.map((category) => (
+          <label key={category} className="flex items-center px-3 py-1 space-x-2 bg-white rounded-lg shadow-md">
+            <input
+              type="checkbox"
+              value={category}
+              checked={selectedCategories.includes(category)}
+              onChange={() => handleCategoryChange(category)}
+              className="w-5 h-5"
+            />
+            <span className="font-semibold text-black">{category}</span>
+          </label>
+        ))}
       </div>
 
       <h2 className="text-2xl font-bold text-center">
