@@ -13,8 +13,7 @@ function App() {
   return (
     <Router>
       <NavBar />
-      <div className="bg-gray-100">
-        {" "}
+      <div className="min-h-screen bg-gray-100 page-container">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/profile" element={<UserProfilePage />} />

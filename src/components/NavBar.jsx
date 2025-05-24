@@ -5,7 +5,7 @@ import { getLoggedUser } from "../api/auth";
 
 const NavBar = () => {
   const [user, setUser] = useState(getLoggedUser());
-
+// l'ho fatta un pò sporca questa parte, visto che non sono più abituato ad usare le parti vanilla
   useEffect(() => {
     const updateUser = () => {
       const loggedUser = getLoggedUser();
@@ -13,11 +13,12 @@ const NavBar = () => {
       setUser(loggedUser);
     };
 
-    // Ascolta il nuovo evento "userUpdated"
     window.addEventListener("userUpdated", updateUser);
+    window.addEventListener("storage", updateUser);
 
     return () => {
       window.removeEventListener("userUpdated", updateUser);
+      window.removeEventListener("storage", updateUser);
     };
   }, []);
 

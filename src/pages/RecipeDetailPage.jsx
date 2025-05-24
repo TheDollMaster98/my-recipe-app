@@ -70,7 +70,7 @@ const RecipeDetailPage = () => {
     }
 
     if (!commento.trim()) {
-      console.warn("⚠️ ATTENZIONE: Il commento è vuoto.");
+      console.warn("ATTENZIONE: Il commento è vuoto.");
       alert("Inserisci un commento!");
       return;
     }
@@ -83,7 +83,7 @@ const RecipeDetailPage = () => {
   };
 
   return (
-    <div className="min-h-screen p-4 bg-white">
+    <div className="w-full h-full p-4 overflow-y-auto bg-white">
       {meal ? (
         <div className="p-8 bg-white rounded shadow-lg">
           {/* Bottone Torna Indietro */}

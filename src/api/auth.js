@@ -56,8 +56,13 @@ export const loginUser = (email, password) => {
   if (user) {
     setLocalData("user", user);
     console.log("Login effettuato! Utente salvato in localStorage:", user);
+
+    // Notifica che l'utente è stato aggiornato
+    window.dispatchEvent(new Event("userUpdated"));
+
     return { success: true, user };
   }
+
   console.log("Login fallito: Credenziali errate!");
   return { success: false, message: "Credenziali errate!" };
 };
@@ -75,6 +80,10 @@ export const isUserLoggedIn = () => {
  */
 export const logoutUser = () => {
   removeLocalData("user");
+
+  // Notifica che l'utente è stato aggiornato
+  window.dispatchEvent(new Event("userUpdated"));
+
   console.log("Logout effettuato. L'utente è stato rimosso.");
 };
 
