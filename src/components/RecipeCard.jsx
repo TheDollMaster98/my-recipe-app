@@ -54,7 +54,7 @@ const RecipeCard = ({ meal, onRecipeChange }) => {
             <span className="text-base align-middle material-icons">info</span>
           </Link>
 
-          {/* Bottone cuore */}
+          {/* Bottone dei like */}
           <button
             onClick={handleToggleFavorite}
             className={`flex items-center justify-center w-12 h-12 rounded-full transition-colors ${
