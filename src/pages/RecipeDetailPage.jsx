@@ -83,7 +83,7 @@ const RecipeDetailPage = () => {
   };
 
   return (
-    <div className="w-full h-full p-4 overflow-y-auto bg-white">
+    <div className="w-full h-full p-8 overflow-y-auto bg-white">
       {meal ? (
         <div className="p-8 bg-white rounded shadow-lg">
           {/* Bottone Torna Indietro */}
