@@ -119,10 +119,18 @@ const RecipeDetailPage = () => {
                     <strong>{review.username}</strong>
                     <span className="text-gray-600">{review.data}</span>
                   </div>
-                  <div className="flex justify-start mt-2 space-x-4">
-                    <span className="text-yellow-500 material-icons">star</span> {review.ratingDifficolta}
-                    <span className="text-yellow-500 material-icons">star</span> {review.ratingGusto}
-                  </div>
+                    <div className="flex items-center gap-6 mt-2">
+                      <div className="flex items-center gap-1">
+                        <span className="font-semibold">Difficoltà:</span>
+                        <span>{review.ratingDifficolta}</span>
+                        <span className="text-yellow-500 material-icons">star</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <span className="font-semibold">Gusto:</span>
+                        <span>{review.ratingGusto}</span>
+                        <span className="text-yellow-500 material-icons">star</span>
+                      </div>
+                    </div>
                   <div className="mt-2">{review.commento}</div>
                 </div>
               ))}
