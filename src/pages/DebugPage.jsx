@@ -58,17 +58,17 @@ const DebugPage = () => {
         <pre className="p-2 overflow-x-auto bg-gray-200 rounded">{JSON.stringify(sessionStorageData, null, 2)}</pre>
       </div>
 
-      <div className="p-4 mb-4 bg-white rounded shadow-lg">
-        <h3 className="text-xl font-semibold">Cache in Memoria</h3>
-        <pre className="p-2 overflow-x-auto bg-gray-200 rounded">{JSON.stringify(cachedMeals, null, 2)}</pre>
-      </div>
-
       {user && (
         <div className="p-4 mb-4 bg-white rounded shadow-lg">
           <h3 className="text-xl font-semibold">Ricettario Utente ({user.email})</h3>
           <pre className="p-2 overflow-x-auto bg-gray-200 rounded">{JSON.stringify(savedRecipes, null, 2)}</pre>
         </div>
       )}
+
+      <div className="p-4 mb-4 bg-white rounded shadow-lg">
+        <h3 className="text-xl font-semibold">Cache in Memoria</h3>
+        <pre className="p-2 overflow-x-auto bg-gray-200 rounded">{JSON.stringify(cachedMeals, null, 2)}</pre>
+      </div>
     </div>
   );
 };
