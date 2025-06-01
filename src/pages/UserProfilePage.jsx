@@ -9,7 +9,7 @@ const UserProfilePage = () => {
 
   useEffect(() => {
     const loggedUser = getLoggedUser("user");
-    console.log("🔹 Utente caricato nel profilo:", loggedUser);
+    console.log("Utente caricato nel profilo:", loggedUser);
 
     if (!loggedUser) {
       console.warn("Nessun utente trovato, reindirizzamento a /login");
