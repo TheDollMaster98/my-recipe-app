@@ -76,7 +76,7 @@ const RecipeDetailPage = () => {
     }
 
     addReview(id, user.username, ratingDifficolta, ratingGusto, commento);
-    console.log("✅ Recensione salvata!");
+    console.log("Recensione salvata!");
 
     setReviews(getReviewsForMeal(id));
     setCommento("");
