@@ -12,7 +12,7 @@ const UserProfilePage = () => {
     console.log("🔹 Utente caricato nel profilo:", loggedUser);
 
     if (!loggedUser) {
-      console.warn("⚠️ Nessun utente trovato, reindirizzamento a /login");
+      console.warn("Nessun utente trovato, reindirizzamento a /login");
       navigate("/login");
     } else {
       setUser(loggedUser);
@@ -22,7 +22,7 @@ const UserProfilePage = () => {
 
   const handleLogout = () => {
     logoutUser();
-    console.log("🚪 Logout effettuato!");
+    console.log("Logout effettuato!");
     navigate("/login");
   };
 
