@@ -9,3 +9,4 @@ Il progetto è un sito web per la gestione di una ricetta.
 - React Router
 - Login Local/Session Storage
 - API Rest TheMealDB (https://www.themealdb.com/)
+- Material Icons – per le icone dell’interfaccia
