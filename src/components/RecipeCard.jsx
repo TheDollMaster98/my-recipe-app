@@ -6,7 +6,7 @@ import {
   removeRecipeFromUser
 } from "../api/auth";
 
-const RecipeCard = ({ meal, onRecipeChange }) => {
+const RecipeCard = ({ meal }) => {
   const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
@@ -25,8 +25,6 @@ const RecipeCard = ({ meal, onRecipeChange }) => {
       addRecipeToUser(meal);
       setIsFavorite(true);
     }
-
-    onRecipeChange?.(); // Se esiste la callback, viene chiamata
   };
 
   return (
